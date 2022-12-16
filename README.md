@@ -3,7 +3,7 @@
 ## Table of contents
 * [General info](#general-info)
 * [Technologies](#technologies)
-* [Setup](#setup)
+* [Initial Server Setup](#initial-server-setup-with-ubuntu-22.04)
 
 ## General info
 Python telegram bot (Web hook)
@@ -243,7 +243,7 @@ Launch bot and go to https://yourip/set_webhook.
 
 ## Relative links
 
-https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-22-04
-https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-nginx-in-ubuntu-22-04#step-2-%E2%80%93-configuring-nginx-to-use-ssl
-http://abdulmadzhidov.ru/blog/Telegram-bot-in-30-min/
+* https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-22-04
+* https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-nginx-in-ubuntu-22-04#step-2-%E2%80%93-configuring-nginx-to-use-ssl
+* http://abdulmadzhidov.ru/blog/Telegram-bot-in-30-min/
 
