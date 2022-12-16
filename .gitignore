@@ -1,0 +1,4 @@
+__pycache__/
+env/
+auth_data.py
+domain_data.py
