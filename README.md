@@ -3,7 +3,7 @@
 ## Table of contents
 * [General info](#general-info)
 * [Technologies](#technologies)
-* [Initial Server Setup](#initial-server-setup-with-ubuntu-22.04)
+* [Initial Server Setup](#initial-server-setup)
 
 ## General info
 Python telegram bot (Web hook)
@@ -17,7 +17,7 @@ Project is created with:
 * Flask-2.2.2
 * python-telegram-bot-13.15
 	
-## Initial Server Setup with Ubuntu 22.04
+## Initial server setup
 Ubuntu 22.04 VPS https://beget.com/ru/cloud/marketplace/ubuntu-22-04
 
 ```
