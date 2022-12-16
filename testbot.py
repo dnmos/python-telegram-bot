@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from flask import Flask, request
 import telegram
 from auth_data import token
+from domain_data import domain_name
 
 app = Flask(__name__)
 app.debug = True
@@ -12,7 +13,7 @@ TOKEN = token
 global bot 
 bot = telegram.Bot(token=TOKEN)
 
-URL = "gobarcelona.ru"
+URL = domain_name
 
 #WebHook
 @app.route('/HOOK', methods=['POST', 'GET']) 
