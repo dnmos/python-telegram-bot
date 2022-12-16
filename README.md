@@ -3,7 +3,11 @@
 ## Table of contents
 * [General info](#general-info)
 * [Technologies](#technologies)
-* [Initial Server Setup](#initial-server-setup)
+* [Initial server setup](#initial-server-setup)
+* [Domain name configure](#domain-name-configure)
+* [Install nginx](#install-nginx)
+* [Python components, virtualenv, gunicorn and flask](#python-components-virtualenv-gunicorn-and-flask)
+* [Relative links](#relative-links)
 
 ## General info
 Python telegram bot (Web hook)
@@ -34,7 +38,7 @@ PasswordAuthentication no
 $ sudo service ssh restart 
 ```
 
-## A domain name configure to point to your server
+## Domain name configure
 
 Purchase domains. Be sure to create the following DNS records:
 
