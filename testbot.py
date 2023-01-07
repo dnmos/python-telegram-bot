@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals 
-from flask import Flask, request
+from flask import Flask, request, send_file
 import telegram
 from credentials import token, domain_name
 from tools import booking_links
@@ -64,3 +64,10 @@ def set_webhook():
 @app.route("/")
 def hello():
 	return "Hello"
+
+@app.route('/pdf/')
+def pdf():
+	try:
+		return send_file('../webpdf/pdf/1day.pdf')
+	except Exception as e:
+		return str(e)
