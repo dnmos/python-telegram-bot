@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals 
-from flask import Flask, request, send_file
+from flask import Flask, request, send_from_directory
 import telegram
 from credentials import token, domain_name
 from tools import booking_links
@@ -47,6 +47,8 @@ def webhook_handler():
 				bot.sendMessage(chat_id=chat_id, text=text_start)
 			elif text == "/services":
 				bot.sendMessage(chat_id=chat_id, parse_mode="HTML", text=text_services, disable_web_page_preview=True)
+			elif text == "/pdf":
+				bot.sendDocument(chat_id=chat_id, document=open("../webpdf/pdf/1day.pdf", "rb"))
 		except Exception as e:
 			print(e)
 	return 'ok' 
@@ -65,9 +67,10 @@ def set_webhook():
 def hello():
 	return "Hello"
 
-@app.route('/pdf/')
-def pdf():
+@app.route('/pdf/<path:name>')
+def send_pdf(name):
 	try:
-		return send_file('../webpdf/pdf/1day.pdf')
+		return send_from_directory('../webpdf/pdf/', name, as_attachment=False)
 	except Exception as e:
 		return str(e)
+
