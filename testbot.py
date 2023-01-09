@@ -4,6 +4,7 @@ from flask import Flask, request, send_from_directory
 import telegram
 from credentials import token, domain_name
 from tools import booking_links
+import json
 
 app = Flask(__name__)
 app.debug = True
@@ -21,15 +22,19 @@ text_start = \
 
 text_services = ""
 for link in booking_links:
-	text = booking_links[link]["text"]
+	service = booking_links[link]["text"]
 	url = booking_links[link]["url"]
-	text_services = text_services + f"{text} <a href='{url}'>{link}</a>\n\n"
+	text_services += f"{service} <a href='{url}'>{link}</a>\n\n"
 
-directory = "https://visitbudapest.ru/wp-content/uploads/pdf/"
-
-articles = {
-	"christmas-markets": "",
-}
+with open('/home/www/webpdf/posts_params.json', 'r') as file:
+	posts_params = json.load(file)
+text_posts = "Выберите статью из списка ниже\n\n"
+for post in posts_params:
+	slug = posts_params[post]['slug']
+	command = slug.replace('-', '_')
+	title = posts_params[post]['title']
+	url = posts_params[post]['url']
+	text_posts = text_posts + title + f' /{command}\n\n' 
 
 #WebHook
 @app.route('/HOOK', methods=['POST', 'GET']) 
@@ -48,7 +53,13 @@ def webhook_handler():
 			elif text == "/services":
 				bot.sendMessage(chat_id=chat_id, parse_mode="HTML", text=text_services, disable_web_page_preview=True)
 			elif text == "/pdf":
-				bot.sendDocument(chat_id=chat_id, document=open("../webpdf/pdf/1day.pdf", "rb"))
+				bot.sendMessage(chat_id=chat_id, parse_mode="HTML", text=text_posts, disable_web_page_preview=True)
+			else:
+				for post in posts_params:
+					slug = posts_params[post]['slug']
+					command = slug.replace('-', '_')
+					if text == f"/{command}":
+						bot.sendDocument(chat_id=chat_id, document=open(f"../webpdf/pdf/{slug}.pdf", "rb"))
 		except Exception as e:
 			print(e)
 	return 'ok' 
