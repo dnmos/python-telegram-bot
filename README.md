@@ -164,7 +164,7 @@ $ sudo nano /etc/nginx/sites-available/testbot
 ```
 server {
     listen 443 default ssl;
-    server_name gobarcelona.ru 45.67.59.106;
+    server_name your_domen your_ip;
     keepalive_timeout 60;
     ssl_certificate /etc/ssl/www/server.crt;
     ssl_certificate_key  /etc/ssl/www/server.key;

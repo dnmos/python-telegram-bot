@@ -28,13 +28,11 @@ for link in booking_links:
 
 with open('/home/www/webpdf/posts_params.json', 'r') as file:
 	posts_params = json.load(file)
-text_posts = "Выберите статью из списка ниже\n\n"
+text_posts = "Выберите статью из списка ниже:\n\n"
 for post in posts_params:
-	slug = posts_params[post]['slug']
-	command = slug.replace('-', '_')
 	title = posts_params[post]['title']
-	url = posts_params[post]['url']
-	text_posts = text_posts + title + f' /{command}\n\n' 
+	command = post.replace('-', '_')
+	text_posts = text_posts + title + '\n' + f' /{command}\n\n' 
 
 #WebHook
 @app.route('/HOOK', methods=['POST', 'GET']) 
@@ -56,10 +54,9 @@ def webhook_handler():
 				bot.sendMessage(chat_id=chat_id, parse_mode="HTML", text=text_posts, disable_web_page_preview=True)
 			else:
 				for post in posts_params:
-					slug = posts_params[post]['slug']
-					command = slug.replace('-', '_')
+					command = post.replace('-', '_')
 					if text == f"/{command}":
-						bot.sendDocument(chat_id=chat_id, document=open(f"../webpdf/pdf/{slug}.pdf", "rb"))
+						bot.sendDocument(chat_id=chat_id, document=open(f"../webpdf/pdf/{post}.pdf", "rb"))
 		except Exception as e:
 			print(e)
 	return 'ok' 
