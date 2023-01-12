@@ -40,9 +40,9 @@ def webhook_handler():
 	if request.method == "POST": 
 		update = telegram.Update.de_json(request.get_json(force=True), bot)
 		try:
+			text = update.message.text
 			chat_id = update.message.chat.id 
 			msg_id = update.message.message_id
-			text = update.message.text
 			userid = update.message.from_user.id
 			username = update.message.from_user.username
 			userfullname = update.message.from_user.full_name
