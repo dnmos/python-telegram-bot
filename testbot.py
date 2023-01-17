@@ -5,6 +5,7 @@ from telegram.ext import Dispatcher, CommandHandler, CallbackContext
 from credentials import token, domain_name
 from tools import booking_links
 import json
+import tg_analytic
 
 app = Flask(__name__)
 app.debug = False
@@ -16,7 +17,7 @@ global bot
 bot = telegram.Bot(TOKEN)
 dispatcher = Dispatcher(bot, None, workers=0)
 
-def Posts_params():
+def posts_params_func():
 	"""PDF Command send posts PDF list
 
 	Args:
@@ -51,11 +52,23 @@ def webhook_handler():
 			userid = update.message.from_user.id
 			username = update.message.from_user.username
 			userfullname = update.message.from_user.full_name
-			posts_params = Posts_params()
+			posts_params = posts_params_func()
 			for post in posts_params:
 				command = post.replace('-', '_')
 				if text == f"/{command}":
+					tg_analytic.statistics(update.message.chat.id, command)
 					bot.sendDocument(chat_id=chat_id, document=open(f"../webpdf/pdf/{post}.pdf", "rb"))
+
+			if text[:4] == 'stat' or text[:4] == 'Stat':
+				st = update.message.text.split(' ')
+				if 'txt' in st or 'тхт' in st:
+					tg_analytic.analysis(st, update.message.chat.id)
+					with open('%s.txt' %update.message.chat.id ,'r',encoding='UTF-8') as file:
+						bot.send_document(update.message.chat.id, file)
+						tg_analytic.remove(update.message.chat.id)
+				else:
+					messages = tg_analytic.analysis(st, update.message.chat.id)
+					bot.send_message(chat_id=chat_id, text=messages)
 		except Exception as e:
 			print(e)
 	return 'ok vbbot' 
@@ -119,6 +132,7 @@ def start(update=telegram.Update, context=CallbackContext) -> None:
 		"Бронировать путешествия в Будапеште по лучшим ценам \n/services\n\n"\
 		"Скачать статью в PDF \n/pdf"
 
+	tg_analytic.statistics(update.message.chat.id, 'start')
 	context.bot.sendMessage(chat_id=update.message.chat.id, text=text_start)
 
 @command_handler('services')
@@ -137,6 +151,7 @@ def services(update=telegram.Update, context=CallbackContext) -> None:
 		url = booking_links[link]["url"]
 		text_services += f"{service} <a href='{url}'>{link}</a>\n\n"
 
+	tg_analytic.statistics(update.message.chat.id, 'services')
 	context.bot.sendMessage(chat_id=update.message.chat.id, parse_mode="HTML", text=text_services, disable_web_page_preview=True)
 
 @command_handler('pdf')
@@ -149,11 +164,12 @@ def pdf(update=telegram.Update, context=CallbackContext) -> None:
 	Returns:
 		None
 	"""
-	posts_params = Posts_params()
+	posts_params = posts_params_func()
 	text_posts = "Выберите статью из списка ниже:\n\n"
 	for post in posts_params:
 		title = posts_params[post]['title']
 		command = post.replace('-', '_')
 		text_posts = text_posts + title + '\n' + f' /{command}\n\n' 
 
+	tg_analytic.statistics(update.message.chat.id, 'pdf')
 	context.bot.sendMessage(chat_id=update.message.chat.id, parse_mode="HTML", text=text_posts, disable_web_page_preview=True)
