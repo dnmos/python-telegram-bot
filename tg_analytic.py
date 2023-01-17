@@ -24,14 +24,12 @@ def remove(user_id):
 	path = os.getcwd() + '/%s.txt' % user_id
 	os.remove(path)
 
-
 # write data to csv
-def statistics(user_id, command):
-	data = datetime.datetime.today().strftime("%Y-%m-%d")
+def statistics(user_id, username, userfullname, command):
+	date = datetime.datetime.today().strftime("%Y-%m-%d")
 	with open('data.csv', 'a', newline="") as file:
 		wr = csv.writer(file, delimiter=';')
-		wr.writerow([data, user_id, command])
-
+		wr.writerow([date, user_id, username, userfullname, command])
 
 # make report
 def analysis(bid, user_id):
@@ -82,7 +80,7 @@ def analysis(bid, user_id):
 				else:
 					message_to_user += '%s - 0 раз\n' % i
 
-	if 'txt' in bid or 'тхт' in bid:
+	if 'txt' in bid or 'текст' in bid:
 		with open('%s.txt' % user_id, 'w', encoding='UTF-8') as file:
 			file.write(message_to_user)
 			file.close()

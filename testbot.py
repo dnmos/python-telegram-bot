@@ -56,12 +56,12 @@ def webhook_handler():
 			for post in posts_params:
 				command = post.replace('-', '_')
 				if text == f"/{command}":
-					tg_analytic.statistics(update.message.chat.id, command)
+					tg_analytic.statistics(update.message.chat.id, update.message.from_user.username, update.message.from_user.full_name, command)
 					bot.sendDocument(chat_id=chat_id, document=open(f"../webpdf/pdf/{post}.pdf", "rb"))
 
-			if text[:4] == 'stat' or text[:4] == 'Stat':
+			if text[:10] == 'статистика' or text[:10] == 'Статистика':
 				st = update.message.text.split(' ')
-				if 'txt' in st or 'тхт' in st:
+				if 'txt' in st or 'текст' in st:
 					tg_analytic.analysis(st, update.message.chat.id)
 					with open('%s.txt' %update.message.chat.id ,'r',encoding='UTF-8') as file:
 						bot.send_document(update.message.chat.id, file)
@@ -132,7 +132,7 @@ def start(update=telegram.Update, context=CallbackContext) -> None:
 		"Бронировать путешествия в Будапеште по лучшим ценам \n/services\n\n"\
 		"Скачать статью в PDF \n/pdf"
 
-	tg_analytic.statistics(update.message.chat.id, 'start')
+	tg_analytic.statistics(update.message.chat.id, update.message.from_user.username, update.message.from_user.full_name, 'start')
 	context.bot.sendMessage(chat_id=update.message.chat.id, text=text_start)
 
 @command_handler('services')
@@ -151,7 +151,7 @@ def services(update=telegram.Update, context=CallbackContext) -> None:
 		url = booking_links[link]["url"]
 		text_services += f"{service} <a href='{url}'>{link}</a>\n\n"
 
-	tg_analytic.statistics(update.message.chat.id, 'services')
+	tg_analytic.statistics(update.message.chat.id, update.message.from_user.username, update.message.from_user.full_name, 'services')
 	context.bot.sendMessage(chat_id=update.message.chat.id, parse_mode="HTML", text=text_services, disable_web_page_preview=True)
 
 @command_handler('pdf')
@@ -171,5 +171,5 @@ def pdf(update=telegram.Update, context=CallbackContext) -> None:
 		command = post.replace('-', '_')
 		text_posts = text_posts + title + '\n' + f' /{command}\n\n' 
 
-	tg_analytic.statistics(update.message.chat.id, 'pdf')
+	tg_analytic.statistics(update.message.chat.id, update.message.from_user.username, update.message.from_user.full_name, 'pdf')
 	context.bot.sendMessage(chat_id=update.message.chat.id, parse_mode="HTML", text=text_posts, disable_web_page_preview=True)
